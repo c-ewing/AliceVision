@@ -46,7 +46,7 @@ See [**Bibliography**](BIBLIOGRAPHY.md) for the list of research papers and tool
 
 ## Get the project
 
-Get the source code: `git clone --recursive git://github.com/alicevision/AliceVision`
+Get the source code: `git clone https://github.com/alicevision/AliceVision.git --recursive`
 
 See [**INSTALL.md**](INSTALL.md) to build the project.
 
