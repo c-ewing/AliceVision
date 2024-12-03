@@ -40,8 +40,8 @@ WORKDIR "${AV_BUILD}"
 
 COPY docker ${AV_DEV}/docker
 
-RUN export CPU_CORES=`${AV_DEV}/docker/check-cpu.sh`; \
-         cmake -DCMAKE_BUILD_TYPE=Release \
+ENV CPU_CORES=`${AV_DEV}/docker/check-cpu.sh`
+RUN cmake -DCMAKE_BUILD_TYPE=Release \
         -DBUILD_SHARED_LIBS:BOOL=ON \
         -DTARGET_ARCHITECTURE=${TARGET_ARCHITECTURE} \
         -DALICEVISION_BUILD_DEPENDENCIES:BOOL=OFF \
@@ -62,6 +62,7 @@ RUN export CPU_CORES=`${AV_DEV}/docker/check-cpu.sh`; \
         "${AV_DEV}" && \
     make install -j${CPU_CORES} && \
     make bundle && \
-    rm -rf "${AV_BUILD}" "${AV_DEV}" && \
-    echo "export ALICEVISION_SENSOR_DB=${AV_BUNDLE}/share/aliceVision/cameraSensors.db" >> /etc/profile.d/alicevision.sh && \
-    echo "export ALICEVISION_ROOT=${AV_BUNDLE}" >> /etc/profile.d/alicevision.sh
+    rm -rf "${AV_BUILD}" "${AV_DEV}"
+
+ENV ALICEVISION_SENSOR_DB=${AV_BUNDLE}/share/aliceVision/cameraSensors.db
+ENV ALICEVISION_ROOT=${AV_BUNDLE}
