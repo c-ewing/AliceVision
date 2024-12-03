@@ -40,10 +40,10 @@ RUN cmake -DCMAKE_BUILD_TYPE=Release \
       -DSWIG_DIR="${AV_INSTALL}/share/swig/4.3.0" -DSWIG_EXECUTABLE="${AV_INSTALL}/bin-deps/swig" \
       "${AV_DEV}" || (cat "${AV_BUILD}/CMakeFiles/CMakeOutput.log" "${AV_BUILD}/CMakeFiles/CMakeError.log" && false)
 
-RUN export CPU_CORES=`${AV_DEV}/docker/check-cpu.sh`; \
-    make -j"${CPU_CORES}" && \
+ENV CPU_CORES=`${AV_DEV}/docker/check-cpu.sh`      
+RUN make -j"${CPU_CORES}" && \
     make install && \
     make bundle && \
-    rm -rf "${AV_DEV}" "${AV_BUILD}" && \
-    echo "export ALICEVISION_SENSOR_DB=${AV_BUNDLE}/share/aliceVision/cameraSensors.db" >> /etc/profile.d/alicevision.sh && \
-	echo "export ALICEVISION_ROOT=${AV_BUNDLE}" >> /etc/profile.d/alicevision.sh
+    rm -rf "${AV_DEV}" "${AV_BUILD}"
+ENV ALICEVISION_SENSOR_DB=${AV_BUNDLE}/share/aliceVision/cameraSensors.db
+ENV ALICEVISION_ROOT=${AV_BUNDLE}
