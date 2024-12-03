@@ -77,16 +77,17 @@ ENV PATH="/opt/rh/devtoolset-10/root/usr/bin:${PATH}" \
     CMAKE_VERSION=3.26.0
 
 COPY dl/vlfeat_K80L3.SIFT.tree ${AV_INSTALL}/share/aliceVision/
-RUN echo "export ALICEVISION_VOCTREE=${AV_INSTALL}/share/aliceVision/vlfeat_K80L3.SIFT.tree" > /etc/profile.d/alicevision.sh
+ENV ALICEVISION_VOCTREE=${AV_INSTALL}/share/aliceVision/vlfeat_K80L3.SIFT.tree
 
 COPY dl/sphereDetection_Mask-RCNN.onnx ${AV_INSTALL}/share/aliceVision/
-RUN echo "export ALICEVISION_SPHERE_DETECTION_MODEL=${AV_INSTALL}/share/aliceVision/sphereDetection_Mask-RCNN.onnx" > /etc/profile.d/alicevision.sh
+ENV ALICEVISION_SPHERE_DETECTION_MODEL=${AV_INSTALL}/share/aliceVision/sphereDetection_Mask-RCNN.onnx
 
 COPY dl/fcn_resnet50.onnx ${AV_INSTALL}/share/aliceVision/
-RUN echo "export ALICEVISION_SEMANTIC_SEGMENTATION_MODEL=${AV_INSTALL}/share/aliceVision/fcn_resnet50.onnx" > /etc/profile.d/alicevision.sh
+ENV ALICEVISION_SEMANTIC_SEGMENTATION_MODEL=${AV_INSTALL}/share/aliceVision/fcn_resnet50.onnx
 
 COPY docker/check-cpu.sh ${AV_DEV}/docker/check-cpu.sh
-RUN export CPU_CORES=`${AV_DEV}/docker/check-cpu.sh` && echo "Build multithreading number of cores: ${CPU_CORES}"
+ENV CPU_CORES=`${AV_DEV}/docker/check-cpu.sh` 
+RUN echo "Build multithreading number of cores: ${CPU_CORES}"
 
 # Manually install cmake
 WORKDIR /opt
