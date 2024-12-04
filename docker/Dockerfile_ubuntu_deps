@@ -71,8 +71,7 @@ COPY dl/fcn_resnet50.onnx ${AV_INSTALL}/share/aliceVision/
 ENV ALICEVISION_SEMANTIC_SEGMENTATION_MODEL=${AV_INSTALL}/share/aliceVision/fcn_resnet50.onnx
 
 COPY docker/check-cpu.sh ${AV_DEV}/docker/check-cpu.sh
-ENV CPU_CORES=`${AV_DEV}/docker/check-cpu.sh` 
-RUN echo "Build multithreading number of cores: ${CPU_CORES}"
+RUN echo "Build multithreading number of cores: `${AV_DEV}/docker/check-cpu.sh`"
 
 COPY CMakeLists.txt ${AV_DEV}/
 COPY src/cmake/Dependencies.cmake ${AV_DEV}/src/cmake/
@@ -120,6 +119,7 @@ RUN test -e /usr/local/cuda/lib64/libcublas.so || ln -s /usr/lib/x86_64-linux-gn
 # RUN make -j ${CPU_CORES} popsift
 # RUN make -j ${CPU_CORES} cctag
 
-RUN cmake --build . -j ${CPU_CORES} && \
+RUN export CPU_CORES=`${AV_DEV}/docker/check-cpu.sh` && \
+    cmake --build . -j ${CPU_CORES} && \
     mv "${AV_INSTALL}/bin" "${AV_INSTALL}/bin-deps" && \
     rm -rf "${AV_BUILD}"
